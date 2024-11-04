@@ -1,6 +1,6 @@
 package com.umich.cloudbite.messaging;
 
-import com.umich.cloudbite.messaging.model.Message;
+import com.umich.cloudbite.model.Message;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

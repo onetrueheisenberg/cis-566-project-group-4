@@ -1,6 +1,6 @@
 package com.umich.cloudbite.messaging;
 
-import com.umich.cloudbite.messaging.model.Message;
+import com.umich.cloudbite.model.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 
