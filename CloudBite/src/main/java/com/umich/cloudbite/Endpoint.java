@@ -1,6 +1,6 @@
 package com.umich.cloudbite;
 
-import com.umich.cloudbite.messaging.model.Message;
+import com.umich.cloudbite.model.Message;
 import com.umich.cloudbite.messaging.RabbitMQSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

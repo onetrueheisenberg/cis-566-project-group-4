@@ -1,13 +1,16 @@
 package com.umich.cloudbite;
 
-import com.umich.cloudbite.messaging.model.Message;
+import com.umich.cloudbite.model.Message;
 import com.umich.cloudbite.messaging.RabbitMQSender;
+import com.umich.cloudbite.model.CartItem;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 
 import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 public class CloudBiteApplication implements CommandLineRunner {
@@ -34,7 +37,10 @@ public class CloudBiteApplication implements CommandLineRunner {
 			Random random = new Random();
 			for (long i = 0;; i++) {
 				String message = "You have a new message with no " + i;
-				rabbitMQSender.send(new Message(message));
+				CartItem ci = new CartItem("id1", "Pizza Margherita", 123.21, 2);
+				List<CartItem> cart = new ArrayList<CartItem>();
+				cart.add(ci);
+				rabbitMQSender.send(new Message(message, cart));
 
 				try {
 					Thread.sleep(random.nextInt((15000 - 4000) + 1) + 4000);
