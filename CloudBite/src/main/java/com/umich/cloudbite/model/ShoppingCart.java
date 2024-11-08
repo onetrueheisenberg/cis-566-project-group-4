@@ -2,37 +2,60 @@ package com.umich.cloudbite.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ShoppingCart {
     private List<CartItem> items = new ArrayList<>();
     private double total;
 
-    public void addItem(CartItem item) {
-        this.items.add(item);
-        this.total += item.getPrice() * item.getQuantity();
+    public void addItem(CartItem newItem) {
+        Optional<CartItem> existingItem = items.stream()
+                .filter(item -> item.getId().equals(newItem.getId()))
+                .findFirst();
+
+        if (existingItem.isPresent()) {
+            existingItem.get().setQuantity(existingItem.get().getQuantity() + newItem.getQuantity());
+        } else {
+            items.add(newItem);
+        }
+        recalculateTotal();
     }
 
-    public void removeItem(CartItem item) {
-        this.items.remove(item);
-        this.total -= item.getPrice() * item.getQuantity();
-    }
+    public void removeItem(CartItem itemToRemove, int quantity) {
+        Optional<CartItem> foundItem = items.stream()
+            .filter(item -> item.getId().equals(itemToRemove.getId()))
+            .findFirst();
 
-    // Method to update an item's quantity
-    public void updateItemQuantity(CartItem item, int quantity) {
-        if(this.items.contains(item)) {
-            item.setQuantity(quantity);
+        if (foundItem.isPresent()) {
+        	System.out.println(foundItem.get().getName());
+            CartItem item = foundItem.get();
+            int newQuantity = item.getQuantity() - quantity;
+            if (newQuantity > 0) {
+                item.setQuantity(newQuantity);
+                System.out.println("item quan"+item.getQuantity());
+            } else {
+                items.remove(item);
+            }
             recalculateTotal();
         }
     }
 
-    // Recalculates the total price of the cart
-    private void recalculateTotal() {
-        total = 0;
-        for (CartItem item : items) {
-            total += item.getPrice() * item.getQuantity();
-        }
+    public void updateItemQuantity(String itemId, int newQuantity) {
+        items.stream()
+                .filter(item -> item.getId().equals(itemId))
+                .findFirst()
+                .ifPresent(item -> {
+                    item.setQuantity(newQuantity);
+                    recalculateTotal();
+                });
     }
 
-    public List<CartItem> getItems() { return items; }
+    public void recalculateTotal() {
+        total = items.stream()
+                     .mapToDouble(item -> item.getPrice() * item.getQuantity())
+                     .sum();
+    }
+
+    public List<CartItem> getItems() { return new ArrayList<>(items); }
     public double getTotal() { return total; }
 }

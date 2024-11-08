@@ -1,11 +1,21 @@
 package com.umich.cloudbite.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document (collection = "cartItems")
 public class CartItem {
+	
+	@Id
     private String id;
     private String name;
     private double price;
     private int quantity;
+    
+    
+    public CartItem() {
+    }
+
 
     // Constructor
     public CartItem(String id, String name, double price, int quantity) {
