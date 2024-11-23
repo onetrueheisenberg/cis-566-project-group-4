@@ -25,7 +25,7 @@ public class CartController {
         
     }
 
-    @PostMapping("/remove")
+    @DeleteMapping("/remove")
     public ResponseEntity<ShoppingCart> removeFromCart(@RequestParam(name = "Id") String itemId, @RequestParam(name = "quantity") int quantity) {
         
         CartItem item = cartService.findCartItemById(itemId)
