@@ -1,5 +1,6 @@
 package com.umich.cloudbite.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,5 +75,10 @@ public class CartService {
     public Optional<CartItem> findCartItemById(String itemId) {
         // Fetch the item from the repository
         return cartItemRepository.findById(itemId);
+    }
+    
+    public List<CartItem> getAllCartItems() {
+        ShoppingCart cart = this.getCart();  // Assuming getCart() returns the current ShoppingCart
+        return cart.getItems();  // Assuming ShoppingCart has a method getItems() that returns List<CartItem>
     }
 }
