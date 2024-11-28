@@ -70,7 +70,7 @@ public class CartService {
         // List<CartItem> cart = new ArrayList<CartItem>();
         // cart.add(ci);
         System.out.println("cart=" + cart);
-        rabbitMQSender.send(new Message(message, cart));
+        // rabbitMQSender.send(new Message(message, cart));
 
         cart.recalculateTotal(); // Update the total after modifying the cart
     }
@@ -89,9 +89,9 @@ public class CartService {
         // Fetch the item from the repository
         return cartItemRepository.findById(itemId);
     }
-    
+
     public List<CartItem> getAllCartItems() {
-        ShoppingCart cart = this.getCart();  // Assuming getCart() returns the current ShoppingCart
-        return cart.getItems();  // Assuming ShoppingCart has a method getItems() that returns List<CartItem>
+        ShoppingCart cart = this.getCart(); // Assuming getCart() returns the current ShoppingCart
+        return cart.getItems(); // Assuming ShoppingCart has a method getItems() that returns List<CartItem>
     }
 }

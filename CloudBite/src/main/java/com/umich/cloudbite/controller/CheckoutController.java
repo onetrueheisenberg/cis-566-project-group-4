@@ -1,4 +1,5 @@
 package com.umich.cloudbite.controller;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.umich.cloudbite.model.CartItem;
 import com.umich.cloudbite.model.CheckoutItem;
+import com.umich.cloudbite.model.Message;
 import com.umich.cloudbite.service.CartService;
 import com.umich.cloudbite.service.CheckoutItemService;
 
@@ -26,7 +28,7 @@ public class CheckoutController {
     private CheckoutItemService checkoutItemService;
     @Autowired
     private CartService cartService;
-    
+
     // Endpoint to checkout all items from the cart
     @PostMapping("/add")
     public ResponseEntity<?> checkoutCartItems() {
@@ -36,18 +38,19 @@ public class CheckoutController {
         }
 
         List<CheckoutItem> checkoutItems = cartItems.stream()
-            .map(ci -> new CheckoutItem(ci.getId(), ci.getName(), ci.getPrice(), ci.getQuantity()))
-            .collect(Collectors.toList());
+                .map(ci -> new CheckoutItem(ci.getId(), ci.getName(), ci.getPrice(), ci.getQuantity()))
+                .collect(Collectors.toList());
 
         // Save all checkout items which internally sets the orderId
         List<CheckoutItem> savedItems = checkoutItemService.saveAllCheckoutItems(checkoutItems);
 
         // Calculate the total order price
         double totalOrderPrice = savedItems.stream()
-            .mapToDouble(item -> item.getPrice() * item.getQuantity())
-            .sum();
+                .mapToDouble(item -> item.getPrice() * item.getQuantity())
+                .sum();
 
         String orderId = savedItems.stream().findFirst().map(CheckoutItem::getOrderId).orElse("");
+        // rabbitMQSender.send(new Message(message, savedItems));
 
         Map<String, Object> response = new HashMap<>();
         response.put("orderId", orderId);

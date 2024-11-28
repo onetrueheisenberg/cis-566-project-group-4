@@ -1,5 +1,7 @@
 package com.umich.cloudbite.messaging;
 
+import org.apache.commons.lang3.SerializationUtils;
+
 import com.umich.cloudbite.model.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ public class RabbitMQReceiver {
 
     @RabbitListener(queues = "${sample.rabbitmq.queue}")
     public void recievedMessage(Message message) {
+        // Object object = SerializationUtils.deserialize(message);
         System.out.println("( " + count.incrementAndGet() + " ) Received = : " + message);
 
     }

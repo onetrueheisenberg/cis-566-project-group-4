@@ -1,19 +1,19 @@
 package com.umich.cloudbite.model;
 
 import java.util.List;
-import com.umich.cloudbite.model.ShoppingCart;
+import com.umich.cloudbite.model.CheckoutItem;
 
 public class Message {
     private String message;
 
-    private ShoppingCart cart;
+    private List<CheckoutItem> checkoutItem;
 
     public Message() {
     }
 
-    public Message(String message, ShoppingCart cart) {
+    public Message(String message, List<CheckoutItem> checkoutItem) {
         this.message = message;
-        this.cart = cart;
+        this.checkoutItem = checkoutItem;
     }
 
     public String getMessage() {
@@ -24,7 +24,7 @@ public class Message {
     public String toString() {
         return "Message{" +
                 "message='" + message + '\'' +
-                "cart = " + cart + '\'' +
+                "checkoutItem = " + checkoutItem + '\'' +
                 '}';
     }
 }
