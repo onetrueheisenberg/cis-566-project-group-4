@@ -1,6 +1,7 @@
 package com.umich.cloudbite.service;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,9 +24,9 @@ public class CheckoutItemService {
     public List<CheckoutItem> saveAllCheckoutItems(List<CheckoutItem> items) {
         String orderId = OrderIdGenerator.generate(); // Generate a unique orderId
         items.forEach(item -> item.setOrderId(orderId)); // Set the orderId for all items
-        String message = "You have a new message with no " + orderId;
+        String message = "You have a new message with no " + items;
         // SerializationUtils.deserialize(message);
-        byte[] byted = SerializationUtils.serialize(message);
+        byte[] byted = SerializationUtils.serialize(new ArrayList(items));
         rabbitMQSender.send(byted);
         return checkoutItemRepository.saveAll(items);
     }

@@ -1,10 +1,14 @@
 package com.umich.cloudbite.model;
 
+import java.io.Serializable;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "checkoutItems")
-public class CheckoutItem {
+public class CheckoutItem implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     @Id
     private String id;
     private String orderId;
@@ -13,7 +17,8 @@ public class CheckoutItem {
     private int quantity;
 
     // Constructors, Getters, and Setters
-    public CheckoutItem() {}
+    public CheckoutItem() {
+    }
 
     public CheckoutItem(String id, String orderId, String name, double price, int quantity) {
         this.id = id;
@@ -22,7 +27,7 @@ public class CheckoutItem {
         this.price = price;
         this.quantity = quantity;
     }
-    
+
     public CheckoutItem(String id, String name, double price, int quantity) {
         this.id = id;
         this.name = name;
@@ -62,11 +67,17 @@ public class CheckoutItem {
         this.quantity = quantity;
     }
 
-	public String getOrderId() {
-		return orderId;
-	}
+    public String getOrderId() {
+        return orderId;
+    }
 
-	public void setOrderId(String orderId) {
-		this.orderId = orderId;
-	}
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    @Override
+    public String toString() {
+        return "Id = " + this.getOrderId() + " & Name = " + this.getName() + " & quantity = " + this.getQuantity()
+                + " & price = " + this.getPrice();
+    }
 }
