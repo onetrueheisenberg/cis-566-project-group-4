@@ -12,7 +12,7 @@ import com.umich.cloudbite.service.MenuService;
 import com.umich.cloudbite.model.MenuItem;
 
 @RestController
-@RequestMapping("/api/menu/admin")
+@RequestMapping("/api/menu/")
 public class AdminController {
 
     @Autowired
@@ -25,7 +25,15 @@ public class AdminController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<MenuItem> addToMenu(@RequestBody MenuItem item) {
+    public ResponseEntity<MenuItem> addItemToMenu(@RequestBody MenuItem item) {
+        // setvice.addToMenu(item);
+        // System.out.println("Added to cart: " + item.getName());
+        return ResponseEntity.ok().build();
+
+    }
+
+    @PostMapping("/add/bulk")
+    public ResponseEntity<MenuItem> addBulkItemsToMenu(@RequestBody List<MenuItem> item) {
         // setvice.addToMenu(item);
         // System.out.println("Added to cart: " + item.getName());
         return ResponseEntity.ok().build();

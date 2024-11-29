@@ -11,7 +11,7 @@ import com.umich.cloudbite.observer.MenuSubject;
 @RequestMapping("/api/menu")
 public class UpdateMenuController {
 
-	private final MenuSubject menuSubject;
+    private final MenuSubject menuSubject;
 
     @Autowired
     public UpdateMenuController(MenuSubject menuSubject) {
@@ -21,6 +21,12 @@ public class UpdateMenuController {
     @PostMapping("/add")
     public ResponseEntity<Void> addMenuItem(@RequestBody MenuItem item) {
         menuSubject.addMenuItem(item);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/add/bulk")
+    public ResponseEntity<Void> addBulkMenuItems(@RequestBody List<MenuItem> items) {
+        menuSubject.addBulkMenuItems(items);
         return ResponseEntity.ok().build();
     }
 

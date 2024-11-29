@@ -66,6 +66,16 @@ public class MenuSubject implements Subject {
         return false;
     }
 
+    public boolean addBulkMenuItems(List<MenuItem> items) {
+        if (items == null) {
+            return false;
+        }
+        System.out.println("item added");
+        menuItems.add(items);
+        notifyObservers(new BulkMenuUpdateCommand(item, "add"));
+        return true;
+    }
+
     public boolean deleteMenuItem(String itemId) {
         boolean removed = menuItems.removeIf(item -> item.getId().equals(itemId));
         if (removed) {

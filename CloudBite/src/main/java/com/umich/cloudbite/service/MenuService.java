@@ -22,7 +22,6 @@ public class MenuService {
 
     public MenuService() {
         menuSubject = new MenuSubject();
-        // Register observers
         menuSubject.registerObserver(new CustomerMenuObserver());
         menuSubject.registerObserver(new KitchenMenuObserver());
     }
@@ -32,9 +31,17 @@ public class MenuService {
     }
 
     public List<MenuItem> getAllMenuItems() {
-        List<MenuItem> menuItems = menuRepository.findAll(); // Assuming getCart() returns the current
-                                                             // ShoppingCart
-        return menuItems; // Assuming ShoppingCart has a method getItems() that returns
-                          // List<CartItem>
+        List<MenuItem> menuItems = menuRepository.findAll();
+        return menuItems;
+    }
+
+    public MenuItem saveMenuItem(MenuItem menuItem) {
+        System.out.println("menu itemsaved - " + menuItem.getName());
+        return menuRepository.save(menuItem);
+    }
+
+    public void deleteMenuItem(String id) {
+        System.out.println("menu item removed - ");
+        menuRepository.deleteById(id);
     }
 }
