@@ -4,11 +4,16 @@ import java.util.List;
 import com.umich.cloudbite.model.CheckoutItem;
 
 public class Message {
+    private byte[] byted;
     private String message;
 
     private List<CheckoutItem> checkoutItem;
 
     public Message() {
+    }
+
+    public Message(byte[] byted) {
+        this.byted = byted;
     }
 
     public Message(String message, List<CheckoutItem> checkoutItem) {
@@ -25,6 +30,7 @@ public class Message {
         return "Message{" +
                 "message='" + message + '\'' +
                 "checkoutItem = " + checkoutItem + '\'' +
+                "byted = " + byted + '\'' +
                 '}';
     }
 }

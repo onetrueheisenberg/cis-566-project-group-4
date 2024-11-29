@@ -15,7 +15,6 @@ public class MenuSubject implements Subject {
     private List<Observer> observers = new ArrayList<>();
     private List<MenuItem> menuItems = new ArrayList<>();
 
-    
     @Autowired
     private List<Observer> autoRegisteredObservers;
     @Autowired
@@ -25,14 +24,14 @@ public class MenuSubject implements Subject {
     public void registerAutoObservers() {
         autoRegisteredObservers.forEach(this::registerObserver);
     }
-    
+
     @PostConstruct
     public void initializeMenuItems() {
         // Load existing menu items from the database at startup
         menuItems.addAll(menuRepository.findAll());
         System.out.println("Loaded menu items: " + menuItems);
     }
-    
+
     @Override
     public void registerObserver(Observer o) {
         if (o != null && !observers.contains(o)) {
@@ -59,7 +58,7 @@ public class MenuSubject implements Subject {
         // Avoid adding duplicate items
         boolean exists = menuItems.stream().anyMatch(mi -> mi.getId().equals(item.getId()));
         if (!exists) {
-        	System.out.println("item added");
+            System.out.println("item added");
             menuItems.add(item);
             notifyObservers(new MenuUpdateCommand(item, "add"));
             return true;
@@ -70,7 +69,7 @@ public class MenuSubject implements Subject {
     public boolean deleteMenuItem(String itemId) {
         boolean removed = menuItems.removeIf(item -> item.getId().equals(itemId));
         if (removed) {
-        	 notifyObservers(new MenuUpdateCommand(itemId, "delete"));
+            notifyObservers(new MenuUpdateCommand(itemId, "delete"));
         }
         return removed;
     }

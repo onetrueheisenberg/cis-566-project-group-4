@@ -10,6 +10,8 @@ import com.umich.cloudbite.util.OrderIdGenerator;
 import com.umich.cloudbite.model.Message;
 import com.umich.cloudbite.messaging.RabbitMQSender;
 
+import org.apache.commons.lang3.SerializationUtils;
+
 @Service
 public class CheckoutItemService {
     @Autowired
@@ -22,7 +24,9 @@ public class CheckoutItemService {
         String orderId = OrderIdGenerator.generate(); // Generate a unique orderId
         items.forEach(item -> item.setOrderId(orderId)); // Set the orderId for all items
         String message = "You have a new message with no " + orderId;
-        rabbitMQSender.send(new Message(message, items));
+        // SerializationUtils.deserialize(message);
+        byte[] byted = SerializationUtils.serialize(message);
+        rabbitMQSender.send(byted);
         return checkoutItemRepository.saveAll(items);
     }
 
