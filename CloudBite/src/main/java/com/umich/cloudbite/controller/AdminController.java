@@ -12,7 +12,7 @@ import com.umich.cloudbite.service.MenuService;
 import com.umich.cloudbite.model.MenuItem;
 
 @RestController
-@RequestMapping("/api/menu/")
+@RequestMapping("/api/menus2/")
 public class AdminController {
 
     @Autowired

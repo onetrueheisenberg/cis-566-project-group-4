@@ -1,7 +1,46 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import Stomp from 'stompjs';
 
 const AdminOrders = () => {
+  // Temporarily putting code here for easy reference
+  const [message, setMessage] = useState('');
+  const connectRabbit = (onMessageCallback) => {
+    let stompClient;
+
+    const ws = new WebSocket('ws://localhost:15674/ws');
+
+    const headers = {
+      login: 'guest',
+      passcode: 'guest',
+      durable: false, // Match existing configuration
+      'auto-delete': false,
+      exclusive: false
+    };
+
+    stompClient = Stomp.over(ws);
+
+    stompClient.connect(
+      headers,
+      (frame) => {
+        console.log('Connected to RabbitMQ');
+        stompClient.subscribe('/queue/order-queue', (message) => {
+          console.log('Received message:', message.body);
+          if (onMessageCallback) onMessageCallback(message.body);
+        });
+      },
+      (error) => {
+        console.error('STOMP connection error:', error);
+      }
+    );
+
+    return 'Connecting to RabbitMQ...';
+  };
+
+  useEffect(() => {
+    const result = connectRabbit();
+    setMessage(result);
+  }, []);
   const orders = [
     {
       id: 1,
@@ -86,6 +125,10 @@ const AdminOrders = () => {
 
   return (
     <div className="p-6 bg-gray-100 shadow-md rounded-lg">
+      <div>
+        <h2>RabbitMQ test</h2>
+        <h1>{message}</h1>
+      </div>
       <h2 className="text-2xl font-bold mb-4 text-center">Manage Orders</h2>
       <div className="space-y-4 max-w-xl mx-auto h-[72vh] overflow-y-auto">
         {orderList.map((order) => (

@@ -18,10 +18,12 @@ import com.umich.cloudbite.model.CheckoutItem;
 public class RabbitMQReceiver {
     private AtomicLong count = new AtomicLong(0L);
 
-    @RabbitListener(queues = "${sample.rabbitmq.queue}")
-    public void recievedMessage(byte[] byted) {
-        List<CheckoutItem> orderItems = (List<CheckoutItem>) SerializationUtils.deserialize(byted);
-        System.out.println("( " + count.incrementAndGet() + " ) Received = : " + orderItems);
+    // @RabbitListener(queues = "${sample.rabbitmq.queue}")
+    // public void recievedMessage(byte[] byted) {
+    // List<CheckoutItem> orderItems = (List<CheckoutItem>)
+    // SerializationUtils.deserialize(byted);
+    // System.out.println("( " + count.incrementAndGet() + " ) Received = : " +
+    // orderItems);
 
-    }
+    // }
 }

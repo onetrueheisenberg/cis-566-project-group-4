@@ -45,7 +45,7 @@ public class MenuSubject implements Subject {
     }
 
     @Override
-    public void notifyObservers(MenuUpdateCommand command) {
+    public void notifyObservers(UpdateCommand command) {
         if (!observers.isEmpty()) {
             observers.forEach(observer -> observer.update(command));
         }
@@ -71,8 +71,8 @@ public class MenuSubject implements Subject {
             return false;
         }
         System.out.println("item added");
-        menuItems.add(items);
-        notifyObservers(new BulkMenuUpdateCommand(item, "add"));
+        menuItems.addAll(items);
+        // notifyObservers(new BulkMenuUpdateCommand(items, "add"));
         return true;
     }
 
