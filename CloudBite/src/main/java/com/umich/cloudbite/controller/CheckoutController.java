@@ -38,7 +38,7 @@ public class CheckoutController {
         }
 
         List<CheckoutItem> checkoutItems = cartItems.stream()
-                .map(ci -> new CheckoutItem(ci.getId(), ci.getName(), ci.getPrice(), ci.getQuantity()))
+                .map(ci -> new CheckoutItem(ci.getId(), ci.getName(), ci.getPrice(), ci.getQuantity(), ci.getImageUrl(), ci.getPrepTime()))
                 .collect(Collectors.toList());
 
         // Save all checkout items which internally sets the orderId
