@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.umich.cloudbite.model.CartItem;
 import com.umich.cloudbite.model.CheckoutItem;
-import com.umich.cloudbite.model.Message;
 import com.umich.cloudbite.service.CartService;
 import com.umich.cloudbite.service.CheckoutItemService;
 

@@ -1,6 +1,5 @@
 package com.umich.cloudbite.messaging;
 
-import com.umich.cloudbite.model.Message;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,8 +21,8 @@ public class RabbitMQSender {
     private AtomicLong count = new AtomicLong(0L);
 
     @Scheduled
-    public void send(byte[] byted) {
-        rabbitTemplate.convertAndSend(exchange, routingkey, byted);
-        System.out.println("( " + count.incrementAndGet() + " ) Send =: " + byted);
+    public void send(String message) {
+        rabbitTemplate.convertAndSend(exchange, routingkey, message);
+        System.out.println("( " + count.incrementAndGet() + " ) Send =: " + message);
     }
 }

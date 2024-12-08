@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { baseApi } from "../constants/api";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Stomp from 'stompjs';
 
 export default function AdminPage() {
   const [activeTab, setActiveTab] = useState("add");
@@ -30,6 +31,31 @@ export default function AdminPage() {
     fetchData();
   }, []);
 
+  const ws = new WebSocket('ws://localhost:15674/ws');
+
+  const headers = {
+    login: 'guest',
+    passcode: 'guest',
+    durable: false, // Match existing configuration
+    'auto-delete': false,
+    exclusive: false
+  };
+
+  let stompClient = Stomp.over(ws);
+
+  stompClient.connect(
+    headers,
+    (frame) => {
+      console.log('Connected to RabbitMQ');
+      stompClient.subscribe('/queue/order-queue', (message) => {
+        console.log(message.body);
+        if (onMessageCallback) onMessageCallback(message.body);
+      });
+    },
+    (error) => {
+      console.error('STOMP connection error:', error);
+    });
+
   const addMenuItem = async (menuItem) => {
     const response = await axios.post(`${baseApi}/menu/add`, menuItem);
     return response.data;
@@ -51,7 +77,7 @@ export default function AdminPage() {
   const handleAdd = async () => {
     try {
       setLoading(true);
-      
+
       await addMenuItem(newItem);
       const updatedItems = await getMenuItems();
       setMenuItems(updatedItems);
@@ -92,19 +118,17 @@ export default function AdminPage() {
       {/* Tab Navigation */}
       <div className="flex items-center justify-center ">
         <button
-          className={`px-4 py-2 ${
-            activeTab === "add" ? "border-b-2 border-blue-500 font-bold" : ""
-          }`}
+          className={`px-4 py-2 ${activeTab === "add" ? "border-b-2 border-blue-500 font-bold" : ""
+            }`}
           onClick={() => setActiveTab("add")}
         >
           Add Menu Item
         </button>
         <button
-          className={`px-4 py-2 ${
-            activeTab === "display"
-              ? "border-b-2 border-blue-500 font-bold"
-              : ""
-          }`}
+          className={`px-4 py-2 ${activeTab === "display"
+            ? "border-b-2 border-blue-500 font-bold"
+            : ""
+            }`}
           onClick={() => setActiveTab("display")}
         >
           Manage Menu Items

@@ -6,13 +6,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
-import com.umich.cloudbite.messaging.RabbitMQSender;
 
 import com.umich.cloudbite.model.CartItem;
 import com.umich.cloudbite.model.ShoppingCart;
 import com.umich.cloudbite.repository.CartRepository;
 
-import com.umich.cloudbite.model.Message;
 
 @Service
 @SessionScope // This annotation ensures each session has its own instance of the shopping
@@ -23,8 +21,6 @@ public class CartService {
 
     @Autowired
     private CartRepository cartItemRepository;
-    @Autowired
-    private RabbitMQSender rabbitMQSender;
 
     public ShoppingCart getCart() {
         return cart;
@@ -65,13 +61,6 @@ public class CartService {
             cart.addItem(newItem);
             cartItemRepository.save(newItem); // Save the new item to the database
         }
-        String message = "You have a new message with no " + newItem.getId();
-        // CartItem ci = new CartItem("id1", "Pizza Margherita", 123.21, 2);
-        // List<CartItem> cart = new ArrayList<CartItem>();
-        // cart.add(ci);
-        System.out.println("cart=" + cart);
-        // rabbitMQSender.send(new Message(message, cart));
-
         cart.recalculateTotal(); // Update the total after modifying the cart
     }
 
@@ -91,8 +80,6 @@ public class CartService {
     }
 
     public List<CartItem> getAllCartItems() {
-        ShoppingCart cart = this.getCart(); // Assuming getCart() returns the current ShoppingCart
-        return cartItemRepository.findAll(); // Assuming ShoppingCart has a method getItems() that returns
-                                             // List<CartItem>
+        return cartItemRepository.findAll(); // Assuming ShoppingCart has a method getItems() that returns List<CartItem>
     }
 }

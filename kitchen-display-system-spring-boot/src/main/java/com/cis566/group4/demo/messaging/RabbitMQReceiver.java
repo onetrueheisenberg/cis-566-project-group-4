@@ -13,6 +13,5 @@ public class RabbitMQReceiver {
     @RabbitListener(queues = "${sample.rabbitmq.queue}")
     public void recievedMessage(Message message) {
         System.out.println("( " + count.incrementAndGet() + " ) Received = : " + message);
-
     }
 }
