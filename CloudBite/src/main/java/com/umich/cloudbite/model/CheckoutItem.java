@@ -15,6 +15,7 @@ public class CheckoutItem implements Serializable {
     private String name;
     private double price;
     private int quantity;
+    private OrderStatus status;
 
     // Constructors, Getters, and Setters
     public CheckoutItem() {
@@ -75,7 +76,15 @@ public class CheckoutItem implements Serializable {
         this.orderId = orderId;
     }
 
-    @Override
+    public OrderStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(OrderStatus status) {
+		this.status = status;
+	}
+
+	@Override
     public String toString() {
         return "Id = " + this.getOrderId() + " & Name = " + this.getName() + " & quantity = " + this.getQuantity()
                 + " & price = " + this.getPrice();
