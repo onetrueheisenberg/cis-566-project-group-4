@@ -38,13 +38,16 @@ public class CartController {
 
     @GetMapping
     public ResponseEntity<ShoppingCart> getCart() {
+        
         ShoppingCart cart = cartService.getCart();
+        System.out.println("fetching cart"+cart.toString());
         return ResponseEntity.ok(cart);
     }
     
     @GetMapping("/items")
     public ResponseEntity<List<CartItem>> getAllCartItems() {
         List<CartItem> items = cartService.getAllCartItems();  
+        items.forEach((item)->System.out.println("cart" + item.toString()));
         return ResponseEntity.ok(items);
     }
 }

@@ -92,6 +92,7 @@ public class CartService {
 
     public List<CartItem> getAllCartItems() {
         ShoppingCart cart = this.getCart(); // Assuming getCart() returns the current ShoppingCart
-        return cart.getItems(); // Assuming ShoppingCart has a method getItems() that returns List<CartItem>
+        return cartItemRepository.findAll(); // Assuming ShoppingCart has a method getItems() that returns
+                                             // List<CartItem>
     }
 }

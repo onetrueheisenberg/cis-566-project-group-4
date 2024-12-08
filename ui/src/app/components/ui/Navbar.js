@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Cart from "../svgs/Cart";
 
 const Navbar = () => {
   return (
@@ -9,15 +10,15 @@ const Navbar = () => {
           <Link href="/">Cloudbite</Link>
         </div>
         <div className="space-x-4">
-          <Link href="/cart" className="hover:text-gray-400">
-            Cart
+          <Link href="/cart" className=" text-white hover:text-gray-400">
+            <Cart />
           </Link>
-          <Link href="/admin" className="hover:text-gray-400">
+          {/* <Link href="/admin" className="hover:text-gray-400">
             Admin
           </Link>
           <Link href="/about" className="hover:text-gray-400">
             About
-          </Link>
+          </Link> */}
         </div>
       </div>
     </nav>

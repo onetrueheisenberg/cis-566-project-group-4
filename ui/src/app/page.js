@@ -1,75 +1,71 @@
+"use client";
 import Clock from "./components/svgs/Clock";
 import Truck from "./components/svgs/Truck";
 import Utensils from "./components/svgs/Utensils";
+import axios from "axios";
+import { baseApi } from "./constants/api";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function Home() {
-  const featuredMeals = [
-    {
-      id: 1,
-      name: "Grilled Salmon Bowl",
-      description:
-        "Fresh Atlantic salmon with quinoa, avocado, and roasted vegetables",
-      price: 24.99,
-      image:
-        "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&q=80&w=800&h=600",
-      category: "Seafood",
-      prepTime: "25 mins",
-    },
-    {
-      id: 2,
-      name: "Chicken Pesto Pasta",
-      description:
-        "Homemade pesto sauce with grilled chicken and fresh cherry tomatoes",
-      price: 18.99,
-      image:
-        "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&q=80&w=800&h=600",
-      category: "Pasta",
-      prepTime: "20 mins",
-    },
-    {
-      id: 3,
-      name: "Buddha Bowl",
-      description:
-        "Nutritious mix of quinoa, roasted chickpeas, and fresh vegetables",
-      price: 16.99,
-      image:
-        "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=800&h=600",
-      category: "Vegetarian",
-      prepTime: "15 mins",
-    },
-    {
-      id: 4,
-      name: "Fruit Bowl",
-      description: "Fresh fruits with nuts, coconut, and strawberries",
-      price: 24.99,
-      image:
-        "https://images.pexels.com/photos/1099680/pexels-photo-1099680.jpeg",
-      category: "Fruits",
-      prepTime: "25 mins",
-    },
-    {
-      id: 1,
-      name: "Grilled Salmon Bowl",
-      description:
-        "Fresh Atlantic salmon with quinoa, avocado, and roasted vegetables",
-      price: 24.99,
-      image:
-        "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&q=80&w=800&h=600",
-      category: "Seafood",
-      prepTime: "25 mins",
-    },
-    {
-      id: 1,
-      name: "Grilled Salmon Bowl",
-      description:
-        "Fresh Atlantic salmon with quinoa, avocado, and roasted vegetables",
-      price: 24.99,
-      image:
-        "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&q=80&w=800&h=600",
-      category: "Seafood",
-      prepTime: "25 mins",
-    },
-  ];
+  const [featuredMeals, setFeaturedMeals] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // Fetch data from the API
+    const fetchMeals = async () => {
+      try {
+        const response = await axios.get(`${baseApi}/menus/items`);
+        setFeaturedMeals(response.data);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching meals:", err);
+        setError("Failed to load meals. Please try again later.");
+        setLoading(false);
+      }
+    };
+
+    fetchMeals();
+  }, []);
+
+  if (loading) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center">
+        <p>Loading...</p>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center">
+        <p>{error}</p>
+      </main>
+    );
+  }
+
+  const addToCart = async (meal) => {
+    try {
+      const response = await axios.post(`${baseApi}/cart/add`, {
+        id: meal.id,
+        name: meal.name,
+        price: meal.price,
+        quantity: 1,
+        description: meal.description,
+        imageUrl: meal.imageUrl,
+        prepTime: meal.prepTime,
+      });
+
+      if (response.status === 200) {
+        toast.success(`${meal.name} added to cart successfully!`);
+      }
+    } catch (err) {
+      console.error("Error adding to cart:", err);
+      toast.error("Failed to add to cart. Please try again.");
+    }
+  };
+
   return (
     <main className="flex min-h-screen flex-col">
       {/* <Navbar /> */}
@@ -94,15 +90,6 @@ export default function Home() {
             Experience restaurant-quality meals prepared by expert chefs,
             delivered fresh to your doorstep.
           </p>
-          {/* <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg">View Menu</Button>
-            <Button size="lg" variant="outline">
-              Learn More
-            </Button>
-          </div>
-          <div className="mt-8">
-            <DownloadButton />
-          </div> */}
         </div>
       </section>
 
@@ -159,7 +146,7 @@ export default function Home() {
               >
                 <img
                   className="w-full h-1/2"
-                  src={meal.image}
+                  src={meal.imageUrl}
                   alt={meal.description}
                 />
                 <div className="px-6 py-4">
@@ -177,7 +164,7 @@ export default function Home() {
                       <span>
                         <Clock className="w-4 h-4 text-gray-400/50" />
                       </span>
-                      <span>{meal.prepTime}</span>
+                      <span>{meal.prepTime} min</span>
                     </p>
 
                     <div className="pt-6 pb-4 flex justify-between items-center">
@@ -185,7 +172,9 @@ export default function Home() {
                         <p className="text-lg font-bold">${meal.price}</p>
                       </div>
                       <div className="bg-black rounded px-1 py-2 cursor-pointer w-24 text-white text-sm text-center">
-                        <button>Add to Card</button>
+                        <button onClick={() => addToCart(meal)}>
+                          Add to Cart
+                        </button>
                       </div>
                     </div>
                   </div>
