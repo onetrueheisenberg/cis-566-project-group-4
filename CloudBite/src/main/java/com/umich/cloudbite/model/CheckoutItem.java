@@ -97,8 +97,8 @@ public class CheckoutItem implements Serializable {
 
 	@Override
     public String toString() {
-        return "Id = " + this.getOrderId() + " & Name = " + this.getName() + " & quantity = " + this.getQuantity()
-                + " & price = " + this.getPrice() + " & status = " + this.getStatus() + 
-                " & imageURL = " + this.getImageUrl();
+        return "Id=" + this.getOrderId() + "&Name=" + this.getName() + "&quantity=" + this.getQuantity()
+                + "&price=" + this.getPrice() + "&status=" + this.getStatus() + 
+                "&imageURL=" + this.getImageUrl();
     }
 }

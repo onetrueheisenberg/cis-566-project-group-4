@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.umich.cloudbite.model.CartItem;
 import com.umich.cloudbite.model.CheckoutItem;
 import com.umich.cloudbite.model.OrderStatus;
@@ -32,7 +33,7 @@ public class CheckoutController {
 
     // Endpoint to checkout all items from the cart
     @PostMapping("/add")
-    public ResponseEntity<?> checkoutCartItems() {
+    public ResponseEntity<?> checkoutCartItems() throws JsonProcessingException {
         List<CartItem> cartItems = cartService.getAllCartItems(); // This should fetch all items in the cart
         if (cartItems.isEmpty()) {
             return ResponseEntity.badRequest().body("No items in the cart to checkout.");
@@ -74,6 +75,12 @@ public class CheckoutController {
     @GetMapping("/get/{orderId}")
     public ResponseEntity<List<CheckoutItem>> getCheckoutItemsByOrderId(@PathVariable String orderId) {
         List<CheckoutItem> items = checkoutItemService.getCheckoutItemsByOrderId(orderId);
+        return ResponseEntity.ok(items);
+    }
+    
+    @GetMapping
+    public ResponseEntity<List<CheckoutItem>> getAllOrders() {
+        List<CheckoutItem> items = checkoutItemService.getAllOrders();
         return ResponseEntity.ok(items);
     }
     
