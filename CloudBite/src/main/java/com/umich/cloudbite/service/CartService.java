@@ -80,6 +80,11 @@ public class CartService {
     }
 
     public List<CartItem> getAllCartItems() {
-        return cartItemRepository.findAll(); // Assuming ShoppingCart has a method getItems() that returns List<CartItem>
+        return cartItemRepository.findAll(); 
     }
+    
+    public void clearCart() {
+    	cartItemRepository.deleteAll();
+    }
+
 }

@@ -37,4 +37,10 @@ public class CheckoutItemService {
     public List<CheckoutItem> getCheckoutItemsByOrderId(String orderId) {
         return checkoutItemRepository.findByOrderId(orderId);
     }
+    
+    // Save or update a single checkout item
+    public CheckoutItem saveCheckoutItem(CheckoutItem item) {
+        return checkoutItemRepository.save(item);
+    }
+
 }

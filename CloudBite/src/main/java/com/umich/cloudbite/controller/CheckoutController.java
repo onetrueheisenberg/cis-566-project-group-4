@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.umich.cloudbite.model.CartItem;
 import com.umich.cloudbite.model.CheckoutItem;
+import com.umich.cloudbite.model.OrderStatus;
 import com.umich.cloudbite.service.CartService;
 import com.umich.cloudbite.service.CheckoutItemService;
 
@@ -43,6 +45,8 @@ public class CheckoutController {
         // Save all checkout items which internally sets the orderId
         List<CheckoutItem> savedItems = checkoutItemService.saveAllCheckoutItems(checkoutItems);
 
+        cartService.clearCart(); 
+        
         // Calculate the total order price
         double totalOrderPrice = savedItems.stream()
                 .mapToDouble(item -> item.getPrice() * item.getQuantity())
@@ -72,4 +76,18 @@ public class CheckoutController {
         List<CheckoutItem> items = checkoutItemService.getCheckoutItemsByOrderId(orderId);
         return ResponseEntity.ok(items);
     }
+    
+    @PostMapping("/updateStatus")
+    public ResponseEntity<?> updateOrderStatus(@RequestParam(name = "orderId") String id, @RequestParam(name = "status") OrderStatus newStatus) {
+        List<CheckoutItem> item = checkoutItemService.getCheckoutItemsByOrderId(id);
+        if (!item.isEmpty()) {
+            CheckoutItem checkoutItem = item.get(0);
+            checkoutItem.setStatus(newStatus);
+            checkoutItemService.saveCheckoutItem(checkoutItem); 
+            return ResponseEntity.ok("Order status updated successfully");
+        } else {
+            return ResponseEntity.badRequest().body("Order with ID " + id + " not found");
+        }
+    }
+
 }
