@@ -233,8 +233,29 @@ const AdminOrders = () => {
             //   parsedData = [parsedData]; // Wrap in an array if it's not already
             //   console.log("Wrapped data in array:", parsedData);
             // }
+            const groupedData = groupByOrderId(parsedData);
 
-            setOrderList(groupByOrderId(parsedData));
+            setOrderList((prevOrders) => {
+              const updatedOrders = { ...prevOrders }; // Shallow copy of the previous orders
+
+              // Iterate over the grouped new data and merge it with the old orders
+              Object.keys(groupedData).forEach((orderId) => {
+                if (updatedOrders[orderId]) {
+                  // If the orderId exists in the previous orders, merge the new items
+                  updatedOrders[orderId].items = [
+                    ...updatedOrders[orderId].items,
+                    ...groupedData[orderId].items,
+                  ];
+                  updatedOrders[orderId].totalQuantity += groupedData[orderId].totalQuantity;
+                  updatedOrders[orderId].totalPrice += groupedData[orderId].totalPrice;
+                } else {
+                  // If the orderId doesn't exist, add the new order
+                  updatedOrders[orderId] = groupedData[orderId];
+                }
+              });
+
+              return updatedOrders; // Return the updated orders state
+            });
           } catch (error) {
             console.error("Error parsing message:", error);
           }
