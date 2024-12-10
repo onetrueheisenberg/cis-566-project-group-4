@@ -5,12 +5,13 @@ CIS-566 Project for Group 4 members
 CloudBite is a full-stack application designed to streamline operations in cloud kitchens by managing orders, displaying kitchen data, and manaing menu through a single platform. The frontend is developed using React, while the backend leverages Spring Boot.
 
 ## System Requirements
-Git
-Node.js
-Java JDK 11 or newer
-Gradle
-MongoDB
-RabbitMQ
+- Git
+- Node.JS
+- Next.JS
+- Java JDK 11 or newer
+- Gradle
+- MongoDB
+- RabbitMQ
 
 ## Github
 https://github.com/onetrueheisenberg/cis-566-project-group-4/
